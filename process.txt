@@ -1,0 +1,122 @@
+Create laravel project =
+composer create-project laravel/laravel:^10.0 example-app
+
+running stage = php artisan serve
+controller = php artisan make:Controller home
+
+
+for header and footer
+header 
+@yield('content')
+footer
+
+--//For include header and footer
+@extends('filename')
+@section('content')
+
+--code
+@endsection
+
+
+------for making migration and modal(Tables)
+php artisan make:model Student -m
+then making columns in migration/filename
+
+  $table->id();
+            $table->string("Name");
+            $table->string("Email");
+            $table->integer("Age");
+            $table->string("picture");
+           
+
+then go to app/providers/appserviceproviden
+
+function me 
+Scheme::defaulStringLength(191);
+
+then .env me database ka name change karna he
+
+php artisan migrate ==>for creating table directly to database
+
+then make form and action="" me url route:: ka 
+<form>
+ke tag ke niche @csrf likhna he
+
+then make controller
+and make function 
+
+public function inserStudent(Request $request){
+
+$student = new Student();
+$Student->Name = $request->txtname;
+$Student->Email= $request->txtemail;
+$Student->Age= $request->txtage;
+$Student->picture =rand()."_".$request->file('photo')->getClientOriginalName(); 
+$request->file('photo')->move('images',$student->picture);
+$student->save();
+
+ 
+}
+
+and make route:post('actioname',[controller::class,'fuction name']) for form
+
+------for alert add/
+@if(Session('error')!=null)
+<p style="text-align:center;color:red;">{{Session('error')}}</p>
+@endif
+
+
+
+<table class="table table-boardered">
+<tr>
+<th>Id</th>
+
+</tr>
+@foreach($student as $item)
+<tr>
+<td> {{$item->id}}</td>
+<td> {{$item->Name}}</td>
+<td> {{$item->Email}}</td>
+<td> {{$item->Age}}</td>
+<td> {{$item->picture}}</td>
+</tr>
+@endforeach
+</table>
+
+
+----------Admin Panel-------------
+public ke folder me admin folder add karna he then skydish ke folders ko copy paste karna he.
+
+--------For Delete
+Make route
+Route::get('DeleteData/{id}',[ControllerName::class,'functionName']);
+
+then make function
+public function name($id){
+$student=Student::find($id);
+$student->delete();
+return redirect()->back()->with('success','Data Delete Successfully!');
+}
+//delete ke button pr lagani he
+<a href="DeleteData/{{$item->id}}"></a>
+
+-------Edit/Update data  
+Form
+
+<a href="('Editdata/{{$item->id}}"></a>
+
+Route::get('EditData/{id}',[ControllerName::class,'functionName']);
+
+then make function
+
+public function Edit_Data($id){
+$student=Student::find($id);
+return view('updatepage',compact('student');
+}
+then make page updatepage
+insert form copy and paste to updatepage
+then update page ke input value me ="{{$student->Name}}"
+then make Route::post
+and make fuction for upddate copy from insert function
+$student =Student::fid($request->id);
+and @if for profile picture @endif

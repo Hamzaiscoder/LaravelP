@@ -1,0 +1,79 @@
+php artisan make:model user -m
+migration
+then make table in migration
+$atble->string('Name')
+email
+password
+picture
+$table->string('role')->default('user') for users
+
+php artisan migrate
+Register form
+Login Form
+and make route for register/login
+
+then work on controller
+public function InsertUser(Request $request){
+$user = new User();
+$user->Name=$request
+email
+password
+$user->Picture=rand().'_'.$request->file('txtfile')->getClientOriginalName();
+$request->file('txtfile')->move('images',$user->Picture);
+
+}
+then make Post route
+
+now make function login
+/Login Page
+public function Login(Request $request)
+{
+    // Retrieve the user based on email
+    $user = customerRegister::where('userEmail', $request->txtemail)->first();
+
+    // Check if the user exists and the password is correct
+    if ($user && Hash::check($request->txtpassword, $user->userPassword)) {
+
+        // Set session data
+        Session::put('Username', $user->userName);
+        Session::put('UserID', $user->id);
+
+        // Check if the user is an admin
+        if ($user->role === 'admin') {
+            return redirect('adminIndex'); // Redirect to admin dashboard
+        } else {
+            return redirect('/'); // Redirect to user dashboard
+        }
+    } else {
+        // Redirect back with an error if credentials are invalid
+        return redirect()->back()->with('error', 'Invalid email or password');
+    }
+}
+
+Route::post('login_verify',[studentCont::class,Login])
+---Navbar conditions
+@if(Session::has('Username')
+
+<li>{{Session::get('Username')}}</li>
+<li><a href="/logout">Logout</a></li>
+
+@else
+lohin page
+register page
+
+@endif
+
+Route::get->logout
+then make function of logout
+public function logout(){
+Session::forget('Usrname');
+Session::forget('Usreid');
+return redirect('loginpage');}
+
+-
+User 
+kamal@gmail.com
+12345
+Admin
+admin@gmail.com
+admin123

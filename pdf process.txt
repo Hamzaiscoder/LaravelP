@@ -1,0 +1,40 @@
+First make table that shows data
+then make a button for click to download pdf
+<a href="generate_pdf"><button></a>
+then search on google 'dom pdf laravel' git website
+paste on terminal
+composer require barryvdh/laravel-dompdf 
+
+go to controller
+
+use Barryvdh\DomPDF\Facade\Pdf;
+public function Converpdf(){
+
+$data[
+'title'=>'Invoice Name',
+'date'=>date('d/m/y'),
+
+'customer'=>DB::table('doctors')->get()
+
+];
+
+$pdf-PDF::loadView('indexpdf',$data);
+return $pdf->download('invoice.pdf')
+}
+
+then make page indexpdf.blade.php
+
+<h1>{{$title}}</h1>
+<h1>{{$date}}</h1>
+
+<table>
+<tr>
+<th></th>
+</tr>
+@foreach($customer as $item)
+<tr>
+<td>{{$item->id}}</td>
+</tr>
+@endforeach
+
+Route::get('generate_pfd',[Controller::class,'Converpdf'])
